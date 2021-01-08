@@ -36,5 +36,8 @@
     ]
   },
   "keywords": [],
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@bundless/cli": "^0.1.4"
+  }
 }
