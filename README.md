@@ -1,4 +1,4 @@
-Comparisons of using webpack (via react-scripts) and bundless for a simple react application
+Comparisons of using webpack (via react-scripts) and [bundless](https://github.com/remorses/bundless) for a simple react application
 
 Server ready and web page loaded (dev commands in package.json)
 
