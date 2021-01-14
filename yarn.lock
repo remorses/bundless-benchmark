@@ -4588,6 +4588,11 @@ es6-symbol@^3.1.1, es6-symbol@~3.1.3:
     d "^1.0.1"
     ext "^1.1.2"
 
+esbuild@^0.8.26:
+  version "0.8.32"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.8.32.tgz#d3d679ea417925f7afaab37555e52070df317355"
+  integrity sha512-5IzQapMW/wFy5oxziHCJzawk26K3xeyrIAQPnPN3c0Q84hqRw6IfGDGfGWOdJNw5tAx77yvwqZ4r1QMpo6emJA==
+
 esbuild@^0.8.29:
   version "0.8.31"
   resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.8.31.tgz#c21e7adb3ad283c951a53de7ad64a5ae2df2ed34"
@@ -9122,6 +9127,15 @@ postcss@^8.1.0:
     nanoid "^3.1.20"
     source-map "^0.6.1"
 
+postcss@^8.2.1:
+  version "8.2.4"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.2.4.tgz#20a98a39cf303d15129c2865a9ec37eda0031d04"
+  integrity sha512-kRFftRoExRVXZlwUuay9iC824qmXPcQQVzAjbCCgjpXnkdMCJYBu2gTwAaFBzv8ewND6O8xFb3aELmEkh9zTzg==
+  dependencies:
+    colorette "^1.2.1"
+    nanoid "^3.1.20"
+    source-map "^0.6.1"
+
 posthtml-parser@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/posthtml-parser/-/posthtml-parser-0.6.0.tgz#52488cdb4fa591c3102de73197c471859ee0be63"
@@ -10010,6 +10024,13 @@ rollup@^1.31.1:
     "@types/estree" "*"
     "@types/node" "*"
     acorn "^7.1.0"
+
+rollup@^2.35.1:
+  version "2.36.1"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.36.1.tgz#2174f0c25c7b400d57b05628d0e732c7ae8d2178"
+  integrity sha512-eAfqho8dyzuVvrGqpR0ITgEdq0zG2QJeWYh+HeuTbpcaXk8vNFc48B7bJa1xYosTCKx0CuW+447oQOW8HgBIZQ==
+  optionalDependencies:
+    fsevents "~2.1.2"
 
 rsvp@^4.8.4:
   version "4.8.5"
@@ -11484,6 +11505,18 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+vite@^2.0.0-beta.29:
+  version "2.0.0-beta.29"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.0.0-beta.29.tgz#42e05c485e6ad6deaa7e5ea6e4187c87c6d1bad5"
+  integrity sha512-UFXXwiF2Y+7de4557mM26vqohc9+GO1G16mmLAXLIgWGjsaz492l7b0h4SPnms9CEDA4tt1tF/vIDQwLHnG7pQ==
+  dependencies:
+    esbuild "^0.8.26"
+    postcss "^8.2.1"
+    resolve "^1.19.0"
+    rollup "^2.35.1"
+  optionalDependencies:
+    fsevents "~2.1.2"
 
 vm-browserify@^1.0.1:
   version "1.1.2"
