@@ -2,7 +2,17 @@ import { execSync, exec, spawn } from "child_process"
 
 jest.setTimeout(1000 * 100)
 
-const showLogs = false
+const SHOW_LOGS = false
+
+const messages: string[] = []
+
+afterAll(() => {
+  log()
+  messages.forEach((m) => {
+    log(m)
+  })
+  log()
+})
 
 describe("first run server ready", () => {
   const cases = [
@@ -11,21 +21,13 @@ describe("first run server ready", () => {
     // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
   ]
 
-  const messages: string[] = []
-  afterAll(() => {
-    log()
-    messages.forEach((m) => {
-      log(m)
-    })
-    log()
-  })
   for (let testCase of cases) {
     test(testCase.command, async () => {
       const completed = new Awaitable()
       const startTime = Date.now()
       const p = spawn(testCase.command, { stdio: "pipe", shell: true })
       function onData(data) {
-        if (showLogs) {
+        if (SHOW_LOGS) {
           log(data)
         }
         if (testCase.readyMessage.test(data)) {
@@ -52,21 +54,13 @@ describe("second run server ready", () => {
     // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
   ]
 
-  const messages: string[] = []
-  afterAll(() => {
-    log()
-    messages.forEach((m) => {
-      log(m)
-    })
-    log()
-  })
   for (let testCase of cases) {
     test(testCase.command, async () => {
       const completed = new Awaitable()
       const startTime = Date.now()
       const p = spawn(testCase.command, { stdio: "pipe", shell: true })
       function onData(data) {
-        if (showLogs) {
+        if (SHOW_LOGS) {
           log(data)
         }
         if (testCase.readyMessage.test(data)) {
@@ -93,18 +87,10 @@ describe("static build", () => {
     // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
   ]
 
-  const messages: string[] = []
-  afterAll(() => {
-    log()
-    messages.forEach((m) => {
-      log(m)
-    })
-    log()
-  })
   for (let testCase of cases) {
-    test(testCase.command, async () => {
+    test(testCase.command, () => {
       const startTime = Date.now()
-      const p = execSync(testCase.command, { stdio: showLogs ? "inherit" : 'pipe' })
+      execSync(testCase.command, { stdio: SHOW_LOGS ? "inherit" : "pipe" })
       const delta = Date.now() - startTime
       messages.push(`'${testCase.command}' completed in  ${formatTime(delta)}`)
     })
