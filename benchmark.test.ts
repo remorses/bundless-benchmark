@@ -17,7 +17,7 @@ describe("first run server ready", () => {
 
   const results: Record<string, number> = {}
   afterAll(() => {
-    log(`server ready (without any cache)`)
+    log(`server ready (without any cache), less is better`)
     log(ansiChart(results))
   })
 
@@ -55,7 +55,7 @@ describe("second run server ready", () => {
   ]
   const results: Record<string, number> = {}
   afterAll(() => {
-    log(`server ready (with cache)`)
+    log(`server ready (with cache), less is better`)
     log(ansiChart(results))
   })
 
@@ -95,7 +95,7 @@ describe("static build", () => {
 
   const results: Record<string, number> = {}
   afterAll(() => {
-    log(`static build`)
+    log(`static build, less is better`)
     log(ansiChart(results))
   })
 
@@ -129,7 +129,7 @@ describe("page ready", () => {
 
   const results: Record<string, number> = {}
   afterAll(() => {
-    log(`browser page refresh`)
+    log(`browser page refresh, less is better`)
     log(ansiChart(results))
   })
 
