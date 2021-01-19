@@ -4,7 +4,7 @@ jest.setTimeout(1000 * 100)
 
 const showLogs = false
 
-describe("first time server ready", () => {
+describe("first run server ready", () => {
   const cases = [
     { command: `yarn bundless dev --force`, readyMessage: /listening on/ },
     { command: `yarn vite --force`, readyMessage: /ready in \d+/ },
@@ -14,7 +14,6 @@ describe("first time server ready", () => {
   const messages: string[] = []
   afterAll(() => {
     log()
-    log(`RESULTS:`)
     messages.forEach((m) => {
       log(m)
     })
@@ -42,6 +41,72 @@ describe("first time server ready", () => {
       p.stdout.on("data", onData)
       p.stderr.on("data", onData)
       await completed.wait()
+    })
+  }
+})
+
+describe("second run server ready", () => {
+  const cases = [
+    { command: `yarn bundless dev`, readyMessage: /listening on/ },
+    { command: `yarn vite`, readyMessage: /ready in \d+/ },
+    // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
+  ]
+
+  const messages: string[] = []
+  afterAll(() => {
+    log()
+    messages.forEach((m) => {
+      log(m)
+    })
+    log()
+  })
+  for (let testCase of cases) {
+    test(testCase.command, async () => {
+      const completed = new Awaitable()
+      const startTime = Date.now()
+      const p = spawn(testCase.command, { stdio: "pipe", shell: true })
+      function onData(data) {
+        if (showLogs) {
+          log(data)
+        }
+        if (testCase.readyMessage.test(data)) {
+          p.kill()
+          const delta = Date.now() - startTime
+          messages.push(`'${testCase.command}' completed in  ${formatTime(delta)}`)
+          completed.resolve()
+        }
+      }
+      p.on("error", (e) => {
+        completed.reject(e)
+      })
+      p.stdout.on("data", onData)
+      p.stderr.on("data", onData)
+      await completed.wait()
+    })
+  }
+})
+
+describe("static build", () => {
+  const cases = [
+    { command: `yarn bundless build` },
+    { command: `yarn vite build` },
+    // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
+  ]
+
+  const messages: string[] = []
+  afterAll(() => {
+    log()
+    messages.forEach((m) => {
+      log(m)
+    })
+    log()
+  })
+  for (let testCase of cases) {
+    test(testCase.command, async () => {
+      const startTime = Date.now()
+      const p = execSync(testCase.command, { stdio: showLogs ? "inherit" : 'pipe' })
+      const delta = Date.now() - startTime
+      messages.push(`'${testCase.command}' completed in  ${formatTime(delta)}`)
     })
   }
 })
