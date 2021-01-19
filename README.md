@@ -1,38 +1,39 @@
-Comparisons of using webpack (via react-scripts) and [bundless](https://github.com/remorses/bundless) for a simple react application
+Tools in benchmarks are
 
-Server ready and web page loaded (dev commands in package.json)
+- [Bundless](https://github.com/remorses/bundless)
+- [Vite](https://github.com/vitejs/vite)
+- [Snowpack](https://github.com/snowpackjs/snowpack)
+- [Craco (webpack)](https://github.com/webpack/webpack)
 
-- Webpack: 18 seconds
-- Bundless: 2.1 seconds
 
-Production build (build commands in package.json)
-
-- Webpack: 25 seconds
-- Bundless: 0.9 seconds
-
-Benchmarks in `benchmark.test.ts`
+Benchmarks are in `benchmark.test.ts`
 
 ```
 server ready (without any cache)
 
-  ▇▇▇▇▇▇▇▇▇▇    [6.661 secs] - yarn vite --force
-  ▇▇▇▇▇▇▇       [4.888 secs] - yarn cross-env BROWSER=none craco start
-  ▇▇            [1.096 secs] - yarn bundless dev --force
+  ▇▇▇▇▇▇▇▇▇▇    [14.650 secs] - yarn snowpack dev --reload
+  ▇▇▇▇          [5.942 secs] - yarn vite --force
+  ▇▇▇           [3.900 secs] - yarn cross-env BROWSER=none craco start
+  ▇             [1.213 secs] - yarn bundless dev --force
 
 server ready (with cache)
 
-  ▇▇▇▇▇▇▇▇▇▇    [0.788 secs] - yarn bundless dev
-  ▇▇▇▇▇         [0.362 secs] - yarn vite
+  ▇▇▇▇▇▇▇▇▇▇    [0.535 secs] - yarn bundless dev
+  ▇▇▇▇▇▇▇▇▇     [0.482 secs] - yarn snowpack dev
+  ▇▇▇▇▇▇        [0.333 secs] - yarn vite
 
 static build
 
-  ▇▇▇▇▇▇▇▇▇▇    [12.346 secs] - yarn vite build
-  ▇▇▇▇▇▇▇       [8.701 secs] - yarn craco build
-  ▇             [1.030 secs] - yarn bundless build
+  ▇▇▇▇▇▇▇▇▇▇    [13.693 secs] - yarn snowpack build
+  ▇▇▇▇▇▇▇▇▇     [12.109 secs] - yarn vite build
+  ▇▇▇▇▇▇        [7.633 secs] - yarn craco build
+  ▇             [0.878 secs] - yarn bundless build
 
-browser refresh
+browser page refresh
 
-  ▇▇▇▇▇▇▇▇▇▇    [1.393 secs] - yarn bundless dev --port 9070
-  ▇▇▇▇▇▇▇▇▇     [1.220 secs] - yarn vite --port 9070
-  ▇▇▇▇▇▇▇▇      [1.142 secs] - yarn cross-env BROWSER=none PORT=9070 craco start
+  ▇▇▇▇▇▇▇▇▇▇    [1.379 secs] - yarn bundless dev --port 9070
+  ▇▇▇▇▇▇▇▇▇     [1.308 secs] - yarn vite --port 9070
+  ▇▇▇▇▇▇▇▇▇     [1.233 secs] - yarn cross-env BROWSER=none PORT=9070 craco start
+  ▇▇▇▇▇▇▇       [1.014 secs] - yarn snowpack dev --port 9070
+
 ```

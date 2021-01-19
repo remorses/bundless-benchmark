@@ -11,8 +11,8 @@ describe("first run server ready", () => {
   const cases = [
     { command: `yarn bundless dev --force`, readyMessage: /Listening on/ },
     { command: `yarn vite --force`, readyMessage: /ready in \d+/ },
+    { command: `yarn snowpack dev --reload`, readyMessage: /Server started/ },
     { command: `yarn cross-env BROWSER=none craco start`, readyMessage: /To create a production build/ },
-    // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
   ]
 
   const results: Record<string, number> = {}
@@ -51,8 +51,7 @@ describe("second run server ready", () => {
   const cases = [
     { command: `yarn bundless dev`, readyMessage: /Listening on/ },
     { command: `yarn vite`, readyMessage: /ready in \d+/ },
-    // { command: `yarn cross-env BROWSER=none craco start`, readyMessage: /To create a production build/ },
-    // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
+    { command: `yarn snowpack dev`, readyMessage: /Server started/ },
   ]
   const results: Record<string, number> = {}
   afterAll(() => {
@@ -91,7 +90,7 @@ describe("static build", () => {
     { command: `yarn bundless build` },
     { command: `yarn vite build` },
     { command: `yarn craco build` },
-    // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
+    { command: `yarn snowpack build` },
   ]
 
   const results: Record<string, number> = {}
@@ -115,8 +114,8 @@ describe("page ready", () => {
   const cases = [
     { command: `yarn bundless dev --port ${PORT}`, readyMessage: /Listening on/ },
     { command: `yarn vite --port ${PORT}`, readyMessage: /ready in \d+/ },
+    { command: `yarn snowpack dev --port ${PORT}`, readyMessage: /Server started/, path: "/snowpack" },
     { command: `yarn cross-env BROWSER=none PORT=${PORT} craco start`, readyMessage: /To create a production build/ },
-    // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
   ]
 
   let browser: Browser
@@ -156,7 +155,7 @@ describe("page ready", () => {
       const startTime = Date.now()
 
       const page = await browser.newPage()
-      await page.goto(`http://localhost:${PORT}`, { waitUntil: "networkidle2", timeout: 1000 * 10 }) // networkidle2 because websocket will alway be open
+      await page.goto(`http://localhost:${PORT}${testCase.path || "/"}`, { waitUntil: "networkidle2", timeout: 1000 * 10 }) // networkidle2 because websocket will alway be open
       const delta = Date.now() - startTime
       results[testCase.command] = delta
       await page.close()
