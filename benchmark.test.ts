@@ -1,10 +1,11 @@
 import { execSync, exec, spawn } from "child_process"
 import puppeteer from "puppeteer"
 import { Browser } from "puppeteer/lib/cjs/puppeteer/common/Browser"
+import { ansiChart } from "./utils"
 
 jest.setTimeout(1000 * 100)
 
-const SHOW_LOGS = true
+const SHOW_LOGS = process.env.SHOW_LOGS || false
 
 const messages: string[] = []
 
@@ -23,6 +24,11 @@ describe("first run server ready", () => {
     // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
   ]
 
+  const results: Record<string, number> = {}
+  afterAll(() => {
+    log(ansiChart(results))
+  })
+
   for (let testCase of cases) {
     test(testCase.command, async () => {
       const completed = new Awaitable()
@@ -36,6 +42,7 @@ describe("first run server ready", () => {
           p.kill()
           const delta = Date.now() - startTime
           messages.push(`'${testCase.command}' completed in  ${formatTime(delta)}`)
+          results[testCase.command] = delta
           completed.resolve()
         }
       }
@@ -55,6 +62,10 @@ describe("second run server ready", () => {
     { command: `yarn vite`, readyMessage: /ready in \d+/ },
     // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
   ]
+  const results: Record<string, number> = {}
+  afterAll(() => {
+    log(ansiChart(results))
+  })
 
   for (let testCase of cases) {
     test(testCase.command, async () => {
@@ -68,6 +79,7 @@ describe("second run server ready", () => {
         if (testCase.readyMessage.test(data)) {
           p.kill()
           const delta = Date.now() - startTime
+          results[testCase.command] = delta
           messages.push(`'${testCase.command}' completed in  ${formatTime(delta)}`)
           completed.resolve()
         }
@@ -89,12 +101,18 @@ describe("static build", () => {
     // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
   ]
 
+  const results: Record<string, number> = {}
+  afterAll(() => {
+    log(ansiChart(results))
+  })
+
   for (let testCase of cases) {
     test(testCase.command, () => {
       const startTime = Date.now()
       execSync(testCase.command, { stdio: SHOW_LOGS ? "inherit" : "pipe" })
       const delta = Date.now() - startTime
       messages.push(`'${testCase.command}' completed in  ${formatTime(delta)}`)
+      results[testCase.command] = delta
     })
   }
 })
@@ -114,6 +132,11 @@ describe("page ready", () => {
 
   afterAll(async () => {
     await browser.close()
+  })
+
+  const results: Record<string, number> = {}
+  afterAll(() => {
+    log(ansiChart(results))
   })
 
   for (let testCase of cases) {
@@ -139,9 +162,9 @@ describe("page ready", () => {
 
       const page = await browser.newPage()
       await page.goto(`http://localhost:${PORT}`, { waitUntil: "networkidle2", timeout: 1000 * 10 }) // networkidle2 because websocket will alway be open
-      log("navigation end")
       const delta = Date.now() - startTime
       messages.push(`'${testCase.command}' page ready in ${formatTime(delta)}`)
+      results[testCase.command] = delta
       await page.close()
       await p.kill()
     })
