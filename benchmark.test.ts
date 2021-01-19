@@ -7,16 +7,6 @@ jest.setTimeout(1000 * 100)
 
 const SHOW_LOGS = process.env.SHOW_LOGS || false
 
-const messages: string[] = []
-
-afterAll(() => {
-  log()
-  messages.forEach((m) => {
-    log(m)
-  })
-  log()
-})
-
 describe("first run server ready", () => {
   const cases = [
     { command: `yarn bundless dev --force`, readyMessage: /Listening on/ },
@@ -43,7 +33,6 @@ describe("first run server ready", () => {
         if (testCase.readyMessage.test(data)) {
           p.kill()
           const delta = Date.now() - startTime
-          messages.push(`'${testCase.command}' completed in  ${formatTime(delta)}`)
           results[testCase.command] = delta
           completed.resolve()
         }
@@ -84,7 +73,6 @@ describe("second run server ready", () => {
           p.kill()
           const delta = Date.now() - startTime
           results[testCase.command] = delta
-          messages.push(`'${testCase.command}' completed in  ${formatTime(delta)}`)
           completed.resolve()
         }
       }
@@ -117,7 +105,6 @@ describe("static build", () => {
       const startTime = Date.now()
       execSync(testCase.command, { stdio: SHOW_LOGS ? "inherit" : "pipe" })
       const delta = Date.now() - startTime
-      messages.push(`'${testCase.command}' completed in  ${formatTime(delta)}`)
       results[testCase.command] = delta
     })
   }
@@ -143,7 +130,7 @@ describe("page ready", () => {
 
   const results: Record<string, number> = {}
   afterAll(() => {
-    log(`browser page is ready`)
+    log(`browser page refresh`)
     log(ansiChart(results))
   })
 
@@ -171,7 +158,6 @@ describe("page ready", () => {
       const page = await browser.newPage()
       await page.goto(`http://localhost:${PORT}`, { waitUntil: "networkidle2", timeout: 1000 * 10 }) // networkidle2 because websocket will alway be open
       const delta = Date.now() - startTime
-      messages.push(`'${testCase.command}' page ready in ${formatTime(delta)}`)
       results[testCase.command] = delta
       await page.close()
       await p.kill()
@@ -193,10 +179,6 @@ class Awaitable {
     await this.promise
     await new Promise((r) => setTimeout(r, 200))
   }
-}
-
-function formatTime(t: number) {
-  return `${(t / 1000).toFixed(2)} seconds`
 }
 
 function log(m = "") {

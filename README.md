@@ -30,7 +30,7 @@ static build
   ▇▇▇▇▇▇▇       [8.701 secs] - yarn craco build
   ▇             [1.030 secs] - yarn bundless build
 
-browser page is ready
+browser refresh
 
   ▇▇▇▇▇▇▇▇▇▇    [1.393 secs] - yarn bundless dev --port 9070
   ▇▇▇▇▇▇▇▇▇     [1.220 secs] - yarn vite --port 9070
