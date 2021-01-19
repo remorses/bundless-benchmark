@@ -21,11 +21,13 @@ describe("first run server ready", () => {
   const cases = [
     { command: `yarn bundless dev --force`, readyMessage: /Listening on/ },
     { command: `yarn vite --force`, readyMessage: /ready in \d+/ },
+    { command: `yarn cross-env BROWSER=none craco start`, readyMessage: /To create a production build/ },
     // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
   ]
 
   const results: Record<string, number> = {}
   afterAll(() => {
+    log(`server ready (without any cache)`)
     log(ansiChart(results))
   })
 
@@ -60,10 +62,12 @@ describe("second run server ready", () => {
   const cases = [
     { command: `yarn bundless dev`, readyMessage: /Listening on/ },
     { command: `yarn vite`, readyMessage: /ready in \d+/ },
+    // { command: `yarn cross-env BROWSER=none craco start`, readyMessage: /To create a production build/ },
     // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
   ]
   const results: Record<string, number> = {}
   afterAll(() => {
+    log(`server ready (with cache)`)
     log(ansiChart(results))
   })
 
@@ -98,11 +102,13 @@ describe("static build", () => {
   const cases = [
     { command: `yarn bundless build` },
     { command: `yarn vite build` },
+    { command: `yarn craco build` },
     // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
   ]
 
   const results: Record<string, number> = {}
   afterAll(() => {
+    log(`static build`)
     log(ansiChart(results))
   })
 
@@ -122,6 +128,7 @@ describe("page ready", () => {
   const cases = [
     { command: `yarn bundless dev --port ${PORT}`, readyMessage: /Listening on/ },
     { command: `yarn vite --port ${PORT}`, readyMessage: /ready in \d+/ },
+    { command: `yarn cross-env BROWSER=none PORT=${PORT} craco start`, readyMessage: /To create a production build/ },
     // { command: `yarn snowpack dev --reload`, readyMessage: /Vite dev server running at/ },
   ]
 
@@ -136,6 +143,7 @@ describe("page ready", () => {
 
   const results: Record<string, number> = {}
   afterAll(() => {
+    log(`browser page is ready`)
     log(ansiChart(results))
   })
 
@@ -181,8 +189,9 @@ class Awaitable {
       this.reject = reject
     })
   }
-  wait(): Promise<void> {
-    return this.promise
+  async wait(): Promise<void> {
+    await this.promise
+    await new Promise((r) => setTimeout(r, 200))
   }
 }
 

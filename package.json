@@ -15,12 +15,7 @@
   },
   "scripts": {
     "test": "jest",
-    "dev": "bundless",
-    "vite:dev": "vite",
-    "dev:bundless": "bundless",
-    "build:bundless": "bundless build",
-    "dev:webpack": "react-scripts start",
-    "build:webpack": "react-scripts build"
+    "dev": "bundless"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -41,8 +36,10 @@
   "description": "",
   "devDependencies": {
     "@bundless/cli": "^0.1.9",
+    "@craco/craco": "^6.0.0",
     "@types/jest": "^26.0.20",
     "chalk": "^4.1.0",
+    "cross-env": "^7.0.3",
     "esbuild-jest": "^0.3.0",
     "jest": "^26.6.3",
     "puppeteer": "^5.5.0",
