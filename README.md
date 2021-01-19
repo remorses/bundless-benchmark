@@ -12,14 +12,17 @@ Production build (build commands in package.json)
 
 Benchmarks in `benchmark.test.ts`
 
-'yarn bundless dev --force' completed in 1.30 seconds
-'yarn vite --force' completed in 5.83 seconds
+  ▇▇▇▇▇▇▇▇▇▇    [7.751 secs] - yarn vite --force
+  ▇▇▇           [2.197 secs] - yarn bundless dev --force
 
-'yarn bundless dev' completed in 0.50 seconds
-'yarn vite' completed in 0.34 seconds
 
-'yarn bundless build' completed in 0.91 seconds
-'yarn vite build' completed in 11.40 seconds
+  ▇▇▇▇▇▇▇▇▇▇    [0.624 secs] - yarn bundless dev
+  ▇▇▇▇▇▇▇▇      [0.491 secs] - yarn vite
 
-'yarn bundless dev --port 9070' page ready in 1.37 seconds
-'yarn vite --port 9070' page ready in 1.20 seconds
+
+  ▇▇▇▇▇▇▇▇▇▇    [14.604 secs] - yarn vite build
+  ▇             [1.140 secs] - yarn bundless build
+
+
+  ▇▇▇▇▇▇▇▇▇▇    [1.545 secs] - yarn bundless dev --port 9070
+  ▇▇▇▇▇▇▇▇      [1.252 secs] - yarn vite --port 9070
