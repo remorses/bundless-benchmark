@@ -9,31 +9,31 @@ Tools in benchmarks are
 Benchmarks are in `benchmark.test.ts`
 
 ```
-server ready (without any cache)
+server ready (without any cache), less is better
 
-  ▇▇▇▇▇▇▇▇▇▇    [14.650 secs] - yarn snowpack dev --reload
-  ▇▇▇▇          [5.942 secs] - yarn vite --force
-  ▇▇▇           [3.900 secs] - yarn cross-env BROWSER=none craco start
-  ▇             [1.213 secs] - yarn bundless dev --force
+  ▇▇▇▇▇▇▇▇▇▇              [15.030 secs] - yarn snowpack dev --reload
+  ▇▇▇▇                    [6.446 secs] - yarn vite --force
+  ▇▇▇                     [4.554 secs] - yarn cross-env BROWSER=none craco start
+  ▇                       [1.419 secs] - yarn bundless dev --force
 
-server ready (with cache)
+server ready (with cache), less is better
 
-  ▇▇▇▇▇▇▇▇▇▇    [0.535 secs] - yarn bundless dev
-  ▇▇▇▇▇▇▇▇▇     [0.482 secs] - yarn snowpack dev
-  ▇▇▇▇▇▇        [0.333 secs] - yarn vite
+  ▇                       [0.447 secs] - yarn snowpack dev
+  ▇                       [0.443 secs] - yarn bundless dev
+  ▇                       [0.312 secs] - yarn vite
 
-static build
+static build, less is better
 
-  ▇▇▇▇▇▇▇▇▇▇    [13.693 secs] - yarn snowpack build
-  ▇▇▇▇▇▇▇▇▇     [12.109 secs] - yarn vite build
-  ▇▇▇▇▇▇        [7.633 secs] - yarn craco build
-  ▇             [0.878 secs] - yarn bundless build
+  ▇▇▇▇▇▇▇▇▇               [14.037 secs] - yarn snowpack build
+  ▇▇▇▇▇▇▇▇                [11.508 secs] - yarn vite build
+  ▇▇▇▇▇▇                  [8.743 secs] - yarn craco build
+  ▇                       [0.859 secs] - yarn bundless build
 
-browser page refresh
+browser page refresh, less is better
 
-  ▇▇▇▇▇▇▇▇▇▇    [1.379 secs] - yarn bundless dev --port 9070
-  ▇▇▇▇▇▇▇▇▇     [1.308 secs] - yarn vite --port 9070
-  ▇▇▇▇▇▇▇▇▇     [1.233 secs] - yarn cross-env BROWSER=none PORT=9070 craco start
-  ▇▇▇▇▇▇▇       [1.014 secs] - yarn snowpack dev --port 9070
+  ▇                       [1.540 secs] - yarn vite --port 9070
+  ▇                       [1.501 secs] - yarn bundless dev --port 9070
+  ▇                       [1.354 secs] - yarn snowpack dev --port 9070
+  ▇                       [1.130 secs] - yarn cross-env BROWSER=none PORT=9070 craco start
 
 ```
