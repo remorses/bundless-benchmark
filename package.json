@@ -14,7 +14,7 @@
     "zustand": "3.2.0"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --silent",
     "dev": "bundless"
   },
   "eslintConfig": {
