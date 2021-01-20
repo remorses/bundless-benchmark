@@ -135,7 +135,7 @@ describe("page ready", () => {
 
   for (let testCase of cases) {
     test(testCase.command + " page ready", async () => {
-      const p = spawn(testCase.command, { stdio: "pipe", shell: true })
+      const p = spawn(testCase.command, { stdio: "pipe", shell: true, env: { ...process.env, NODE_ENV: "development" } })
       p.stdout.on("data", onData)
       p.stderr.on("data", onData)
       const ready = new Awaitable()

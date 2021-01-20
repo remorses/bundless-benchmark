@@ -30,12 +30,12 @@ function fg(text, time) {
   return modifier(text)
 }
 
-export function ansiChart(_data: Record<string, number>, options: { limit: number } = { limit: 5 }): string {
+export function ansiChart(_data: Record<string, number>, _options = { limit: 5, maxWidth: 20, max: 1000 * 30 }): string {
   const data: FolderStats[] = Object.keys(_data).map((k) => ({ path: k, timeConsume: _data[k] }))
   const highlights = stats(data)
-  const maxWidth = 10
+  const { maxWidth, limit, max } = _options
   const shortedData = data.sort((a, b) => Number(b["timeConsume"]) - Number(a["timeConsume"]))
-  const limitedData = options && options.limit ? shortedData.slice(0, options.limit) : shortedData
+  const limitedData = limit ? shortedData.slice(0, limit) : shortedData
 
   return (
     "\n" +
@@ -43,8 +43,8 @@ export function ansiChart(_data: Record<string, number>, options: { limit: numbe
       .map((item) => {
         const label = item["path"]
         const v = Number(item["timeConsume"])
-        const barLength = Math.max(1, Math.round((v * maxWidth) / highlights.max)) || 0
-        const padLength = 10 - barLength
+        const barLength = Math.max(1, Math.round((v * maxWidth) / (max || highlights.max))) || 0
+        const padLength = maxWidth - barLength
         const barColor = highlights.outliers.find(({ path }) => path === label) ? chalk.yellowBright : chalk.greenBright
         return [
           "  ",
