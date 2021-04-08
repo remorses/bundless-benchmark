@@ -11,8 +11,14 @@ describe("first run server ready", () => {
   const cases = [
     { command: `yarn bundless dev --force`, readyMessage: /Listening on/ },
     { command: `yarn vite --force`, readyMessage: /ready in \d+/ },
-    { command: `yarn snowpack dev --reload`, readyMessage: /Server started/ },
-    { command: `yarn cross-env BROWSER=none craco start`, readyMessage: /To create a production build/ },
+    {
+      command: `yarn snowpack dev --reload`,
+      readyMessage: /Server started/,
+    },
+    {
+      command: `yarn cross-env BROWSER=none craco start`,
+      readyMessage: /To create a production build/,
+    },
   ]
 
   const results: Record<string, number> = {}
@@ -102,7 +108,9 @@ describe("static build", () => {
   for (let testCase of cases) {
     test(testCase.command, () => {
       const startTime = Date.now()
-      execSync(testCase.command, { stdio: SHOW_LOGS ? "inherit" : "pipe" })
+      execSync(testCase.command, {
+        stdio: SHOW_LOGS ? "inherit" : "pipe",
+      })
       const delta = Date.now() - startTime
       results[testCase.command] = delta
     })
@@ -112,10 +120,20 @@ describe("static build", () => {
 describe("page ready", () => {
   const PORT = 9070
   const cases = [
-    { command: `yarn bundless dev --port ${PORT}`, readyMessage: /Listening on/ },
+    {
+      command: `yarn bundless dev --port ${PORT}`,
+      readyMessage: /Listening on/,
+    },
     { command: `yarn vite --port ${PORT}`, readyMessage: /ready in \d+/ },
-    { command: `yarn snowpack dev --port ${PORT}`, readyMessage: /Server started/, path: "/snowpack" },
-    { command: `yarn cross-env BROWSER=none PORT=${PORT} craco start`, readyMessage: /To create a production build/ },
+    {
+      command: `yarn snowpack dev --port ${PORT}`,
+      readyMessage: /Server started/,
+      path: "/snowpack",
+    },
+    {
+      command: `yarn cross-env BROWSER=none PORT=${PORT} craco start`,
+      readyMessage: /To create a production build/,
+    },
   ]
 
   let browser: Browser
@@ -123,19 +141,23 @@ describe("page ready", () => {
     browser = await puppeteer.launch({ headless: false }) // TODO test does not work when headlesss is false, may be related to WebGl
   })
 
+  const results: Record<string, number> = {}
+  const resultsSecondTime: Record<string, number> = {}
   afterAll(async () => {
     await browser.close()
-  })
-
-  const results: Record<string, number> = {}
-  afterAll(() => {
-    log(`browser page refresh, less is better`)
+    log(`browser first page refresh, less is better`)
     log(ansiChart(results))
+    log(`browser second page refresh, less is better`)
+    log(ansiChart(resultsSecondTime))
   })
 
   for (let testCase of cases) {
     test(testCase.command + " page ready", async () => {
-      const p = spawn(testCase.command, { stdio: "pipe", shell: true, env: { ...process.env, NODE_ENV: "development" } })
+      const p = spawn(testCase.command, {
+        stdio: "pipe",
+        shell: true,
+        env: { ...process.env, NODE_ENV: "development" },
+      })
       p.stdout.on("data", onData)
       p.stderr.on("data", onData)
       const ready = new Awaitable()
@@ -152,13 +174,24 @@ describe("page ready", () => {
         throw e
       })
       await ready.wait()
-      const startTime = Date.now()
 
       const page = await browser.newPage()
-      await page.goto(`http://localhost:${PORT}${testCase.path || "/"}`, { waitUntil: "networkidle2", timeout: 1000 * 10 }) // networkidle2 because websocket will alway be open
-      const delta = Date.now() - startTime
-      results[testCase.command] = delta
+      const startTime = Date.now()
+      await page.goto(`http://localhost:${PORT}${testCase.path || "/"}`, {
+        waitUntil: "networkidle2",
+        timeout: 1000 * 10,
+      }) // networkidle2 because websocket will alway be open
+
+      results[testCase.command] = Date.now() - startTime
       await page.close()
+      const page2 = await browser.newPage()
+      const startTime2 = Date.now()
+      await page2.goto(`http://localhost:${PORT}${testCase.path || "/"}`, {
+        waitUntil: "networkidle2",
+        timeout: 1000 * 10,
+      })
+      resultsSecondTime[testCase.command] = Date.now() - startTime2
+      await page2.close()
       await p.kill()
     })
   }

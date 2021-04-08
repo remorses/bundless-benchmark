@@ -6,3 +6,4 @@ build
 out
 .bundless
 .eslintcache
+.cache
