@@ -6,6 +6,9 @@ import { Ground } from "./Ground"
 import { Player } from "./Player"
 import { doImportLodash } from "./dynamic"
 import { Cube, Cubes } from "./Cube"
+import Entry_00_0000 from "./components/0.js"
+
+console.log(Entry_00_0000)
 
 export default function App() {
   doImportLodash()
